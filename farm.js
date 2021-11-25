@@ -26,7 +26,7 @@ const functions = {
         } else if (factor.sun === "medium") {
             sunFactor = 100 + crop.crop.factor.sun.medium;
         } else if (factor.sun === "high") {
-            sunFactor = (100 + crop.crop.factor.sun.high);
+            sunFactor = 100 + crop.crop.factor.sun.high;
         };
         let windFactor;
         if (factor.wind === "low") {
@@ -34,17 +34,36 @@ const functions = {
         } else if (factor.wind === "medium") {
             windFactor = 100 + crop.crop.factor.wind.medium;
         } else if (factor.wind === "high") {
-            windFactor = (100 + crop.crop.factor.wind.high);
+            windFactor = 100 + crop.crop.factor.wind.high;
         };
         const cropYield = crop.crop.yield * crop.numCrops
         return cropYield * sunFactor/100 * windFactor/100;
     },
-    getTotalYield: crops => {
-        // console.log("This is crops in getTotalYield", crops)
+    getTotalYield: (crops, factors) => {
+        const sunFactor = factors.environmentFactors.sun; 
+        const windFactor = factors.environmentFactors.wind; 
         const totalYield = crops.crops.map(crop => {
-            return crop.crop.yield * crop.numCrops;
-            }).reduce((prevNum, currentNum) => prevNum + currentNum);
-        return totalYield;
+            let sunForCrop;
+            if (sunFactor === "low") {
+                sunForCrop = 100 + crop.crop.factor.sun.low
+            } else if (sunFactor === "medium") {
+                sunForCrop = 100 + crop.crop.factor.sun.medium;
+            } else if (sunFactor === "high") {
+                sunFactor = 100 + crop.crop.factor.sun.high;
+            };
+            let windForCrop;
+            if (windFactor === "low") {
+                windForCrop = 100 + crop.crop.factor.wind.low;
+            } else if (windFactor === "medium") {
+                windForCrop = 100 + crop.crop.factor.wind.medium;
+            } else if (windFactor === "high") {
+                windForCrop = 100 + crop.crop.factor.wind.high;
+            };
+            const yieldNoFactor = crop.crop.yield * crop.numCrops;
+            const yieldWithFactor = yieldNoFactor * sunForCrop/100 * windForCrop/100;
+            return yieldWithFactor;
+        }).reduce((prevNum, currentNum) => prevNum + currentNum);
+        return totalYield;      
     },
 
     getCostsForCrop: crop => crop.costsPerPlant * crop.plantsPerCrop ,

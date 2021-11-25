@@ -69,27 +69,55 @@ describe("getTotalYield", () => {
     test("Calculate total yield with multiple crops", () => {
         const corn = {
             name: "corn",
-            yield: 3,
+            yield: 4,
+            factor: {
+                sun: {
+                    low: -50,
+                    medium: 0,
+                    high: 50,
+                },
+                wind: {
+                    low: 20,
+                    medium: 0,
+                    high: -20, 
+                },
+            },
         };
         const pumpkin = {
             name: "pumpkin",
-            yield: 4,
+            yield: 5,
+            factor: {
+                sun: {
+                    low: -30,
+                    medium: 0,
+                    high: 60,
+                },
+                wind: {
+                    low: 30,
+                    medium: 0,
+                    high: -40, 
+                },
+            },
         };
         const crops = [
-            { crop: corn, numCrops: 5 },
-            { crop: pumpkin, numCrops: 2 },
+            { crop: corn, numCrops: 5 }, // expect: 20 x 0,5 x 0,8 = 8
+            { crop: pumpkin, numCrops: 2 }, // expect: 10 x 0,7 x 0,6 = 4,2
         ];
-        expect(getTotalYield({ crops })).toBe(23);
+        const environmentFactors = { 
+            sun: "low", 
+            wind: "high"
+        };
+        expect(getTotalYield({ crops }, { environmentFactors })).toBe(12.2);
     });
 
-    test("Calculate total yield with 0 amount", () => {
-        const corn = {
-            name: "corn",
-            yield: 3,
-        };
-        const crops = [{ crop: corn, numCrops: 0 }];
-        expect(getTotalYield({ crops })).toBe(0);
-    });
+//     test("Calculate total yield with 0 amount", () => {
+//         const corn = {
+//             name: "corn",
+//             yield: 3,
+//         };
+//         const crops = [{ crop: corn, numCrops: 0 }];
+//         expect(getTotalYield({ crops })).toBe(0);
+//     });
 });
 
 describe("getCostsForCrop", () => {
