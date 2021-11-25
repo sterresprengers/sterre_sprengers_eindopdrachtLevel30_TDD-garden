@@ -1,26 +1,44 @@
 const functions = {
     getYieldForPlant: (plant, factor) => {
         let sunFactor;
-        if (factor.sun = "low") {
+        if (factor.sun === "low") {
             sunFactor = 100 + plant.factor.sun.low
-        } else if (factor.sun = "medium") {
+        } else if (factor.sun === "medium") {
             sunFactor = 100 + plant.factor.sun.medium;
-        } else if (factor.sun = "high") {
+        } else if (factor.sun === "high") {
             sunFactor = 100 + plant.factor.sun.high;
         };
         let windFactor;
-        if (factor.wind = "low") {
+        if (factor.wind === "low") {
             windFactor = 100 + plant.factor.wind.low;
-        } else if (factor.wind = "medium") {
+        } else if (factor.wind === "medium") {
             windFactor = 100 + plant.factor.wind.medium;
-        } else if (factor.wind = "high") {
+        } else if (factor.wind === "high") {
             windFactor = 100 + plant.factor.wind.high;
         };
         return plant.yield * sunFactor/100 * windFactor/100;
     },
 
-    getYieldForCrop: crop => crop.crop.yield * crop.numCrops ,
-
+    getYieldForCrop: (crop, factor) => {
+        let sunFactor;
+        if (factor.sun === "low") {
+            sunFactor = 100 + crop.crop.factor.sun.low
+        } else if (factor.sun === "medium") {
+            sunFactor = 100 + crop.crop.factor.sun.medium;
+        } else if (factor.sun === "high") {
+            sunFactor = (100 + crop.crop.factor.sun.high);
+        };
+        let windFactor;
+        if (factor.wind === "low") {
+            windFactor = 100 + crop.crop.factor.wind.low;
+        } else if (factor.wind === "medium") {
+            windFactor = 100 + crop.crop.factor.wind.medium;
+        } else if (factor.wind === "high") {
+            windFactor = (100 + crop.crop.factor.wind.high);
+        };
+        const cropYield = crop.crop.yield * crop.numCrops
+        return cropYield * sunFactor/100 * windFactor/100;
+    },
     getTotalYield: crops => {
         // console.log("This is crops in getTotalYield", crops)
         const totalYield = crops.crops.map(crop => {
