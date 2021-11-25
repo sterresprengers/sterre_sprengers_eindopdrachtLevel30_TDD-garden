@@ -12,10 +12,25 @@ describe("getYieldForPlant", () => {
     const corn = {
         name: "corn",
         yield: 30,
+        factor: {
+            sun: {
+                low: -50,
+                medium: 0,
+                high: 50,
+            },
+            wind: {
+                low: 20,
+                medium: 0,
+                high: -20, 
+            },
+        },
     };
-
+    const environmentFactors = {
+        sun: "low",
+        wind: "low",
+    };
     test("Get yield for plant with no environment factors", () => {
-        expect(getYieldForPlant(corn)).toBe(30);
+        expect(getYieldForPlant(corn, environmentFactors)).toBe(18);
     });
 });
 
