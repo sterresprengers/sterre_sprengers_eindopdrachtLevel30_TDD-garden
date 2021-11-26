@@ -68,7 +68,26 @@ const functions = {
 
     getCostsForCrop: crop => crop.costsPerPlant * crop.plantsPerCrop ,
 
-    getRevenueForCrop: crop => crop.priceKilo * crop.numKilos ,
+    getRevenueForCrop: (crop, factor) => { 
+        let sunFactor;
+        if (factor.sun === "low") {
+            sunFactor = 100 + crop.factor.sun.low
+        } else if (factor.sun === "medium") {
+            sunFactor = 100 + crop.factor.sun.medium;
+        } else if (factor.sun === "high") {
+            sunFactor = 100 + crop.factor.sun.high;
+        };
+        let windFactor;
+        if (factor.wind === "low") {
+            windFactor = 100 + crop.factor.wind.low;
+        } else if (factor.wind === "medium") {
+            windFactor = 100 + crop.factor.wind.medium;
+        } else if (factor.wind === "high") {
+            windFactor = 100 + crop.factor.wind.high;
+        };
+        const revenueForCrop = crop.priceKilo * crop.numKilos
+        return revenueForCrop * sunFactor/100 * windFactor/100;
+    },
 
     getProfitForCrop: crop => {
         const revenue = crop.priceKilo * crop.numKilos;
