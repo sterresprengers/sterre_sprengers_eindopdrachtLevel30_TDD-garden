@@ -107,17 +107,8 @@ describe("getTotalYield", () => {
             sun: "low", 
             wind: "high",
         };
-        expect(getTotalYield({ crops }, { environmentFactors })).toBe(12.2);
+        expect(getTotalYield({ crops }, { environmentFactors })).toBe(12.2); // >> curly brackets needed? 
     });
-
-//     test("Calculate total yield with 0 amount", () => {
-//         const corn = {
-//             name: "corn",
-//             yield: 3,
-//         };
-//         const crops = [{ crop: corn, numCrops: 0 }];
-//         expect(getTotalYield({ crops })).toBe(0);
-//     });
 });
 
 describe("getCostsForCrop", () => {
@@ -195,6 +186,18 @@ describe("getTotalProfit", () => {
             plantsPerCrop: 50,
             priceKilo: 3,
             numKilos: 60,
+            factor: {
+                sun: {
+                    low: -30,
+                    medium: 0,
+                    high: 60,
+                },
+                wind: {
+                    low: 30,
+                    medium: 0,
+                    high: -40, 
+                },
+            },
         };
         const corn = {
             name: "corn",
@@ -202,11 +205,27 @@ describe("getTotalProfit", () => {
             plantsPerCrop: 50,
             priceKilo: 2,
             numKilos: 50,
+            factor: {
+                sun: {
+                    low: -20,
+                    medium: 0,
+                    high: 70,
+                },
+                wind: {
+                    low: 50,
+                    medium: 0,
+                    high: -30, 
+                },
+            },
         };
         const crops = [
-            { crop: apples, numCrops: 5 }, // profit = 80
-            { crop: corn, numCrops: 2 }, // profit = 50
+            { crop: apples }, 
+            { crop: corn }, 
         ];
-        expect(getTotalProfit({ crops })).toBe(130);
+        const environmentFactors = { 
+            sun: "high", 
+            wind: "high",
+        };
+        expect(getTotalProfit({ crops }, { environmentFactors })).toBe(141.8);
     });
 });

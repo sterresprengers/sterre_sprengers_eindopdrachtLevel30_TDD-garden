@@ -49,7 +49,7 @@ const functions = {
             } else if (sunFactor === "medium") {
                 sunForCrop = 100 + crop.crop.factor.sun.medium;
             } else if (sunFactor === "high") {
-                sunFactor = 100 + crop.crop.factor.sun.high;
+                sunForCrop = 100 + crop.crop.factor.sun.high;
             };
             let windForCrop;
             if (windFactor === "low") {
@@ -112,14 +112,33 @@ const functions = {
         return revenueWithFactor - costs;
     },
 
-    getTotalProfit: crops => {
-        // console.log("This is crops in getTotalProfit", crops)
+    getTotalProfit: (crops, factors) => {
+        const sunFactor = factors.environmentFactors.sun; 
+        const windFactor = factors.environmentFactors.wind;
         const totalProfit = crops.crops.map(crop => {
-            const revenue = crop.crop.priceKilo * crop.crop.numKilos;
             const costs = crop.crop.costsPerPlant * crop.crop.plantsPerCrop;
-            return revenue - costs;
-        }).reduce((prevNum, currentNum) => prevNum + currentNum);
-        return totalProfit;
+            const revenueNoFactors = crop.crop.priceKilo * crop.crop.numKilos;
+            let sunForCrop;
+            if (sunFactor === "low") {
+                sunForCrop = 100 + crop.crop.factor.sun.low
+            } else if (sunFactor === "medium") {
+                sunForCrop = 100 + crop.crop.factor.sun.medium;
+            } else if (sunFactor === "high") {
+                sunForCrop = 100 + crop.crop.factor.sun.high;
+            };
+            let windForCrop;
+            if (windFactor === "low") {
+                windForCrop = 100 + crop.crop.factor.wind.low;
+            } else if (windFactor === "medium") {
+                windForCrop = 100 + crop.crop.factor.wind.medium;
+            } else if (windFactor === "high") {
+                windForCrop = 100 + crop.crop.factor.wind.high;
+            };
+            const revenueWithFactors = revenueNoFactors * sunForCrop/100 * windForCrop/100;
+            const totalProfitForCrop = revenueWithFactors - costs;
+            return totalProfitForCrop;
+            }).reduce((prevNum, currentNum) => prevNum + currentNum);
+            return totalProfit;
     },
 }
 module.exports = functions;
