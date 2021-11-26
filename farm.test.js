@@ -166,8 +166,24 @@ describe("getProfitForCrop", () => {
             plantsPerCrop: 50,
             priceKilo: 3,
             numKilos: 60,
+            factor: {
+                sun: {
+                    low: -30,
+                    medium: 0,
+                    high: 60,
+                },
+                wind: {
+                    low: 30,
+                    medium: 0,
+                    high: -40, 
+                },
+            },
         };
-        expect(getProfitForCrop(apples)).toBe(80);
+        const environmentFactors = { 
+            sun: "high", 
+            wind: "medium",
+        };
+        expect(getProfitForCrop(apples, environmentFactors)).toBe(188); 
     });
 });
 
